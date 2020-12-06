@@ -2,12 +2,9 @@ package edu.wsu;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -17,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class SnakePane {
+public class SnakePane extends PrimaryController {
 
     private List<Circle> createSnake() {
         List<Circle> snake = new LinkedList<>();
@@ -34,6 +31,15 @@ public class SnakePane {
 
     public void drawSnake(List<Circle> snake, Pane pane){pane.getChildren().addAll(snake); }
 
+    private void moveSnake(List<Circle> snake) {
+        Circle oldHead = snake.get(0);
+        Circle newHead = snake.remove(snake.size()-1);
+        oldHead.setFill(Color.LIMEGREEN);
+        newHead.setFill(Color.RED);
+        newHead.setCenterX((oldHead.getCenterX() + 20)%600);
+        newHead.setCenterY(oldHead.getCenterY());
+        snake.add(0,newHead);
+    }
     private void moveSnakeRight(List<Circle> snake) {
         Circle oldHead = snake.get(0);
         Circle newHead = snake.remove(snake.size()-1);
@@ -69,10 +75,11 @@ public class SnakePane {
         Circle newHead = snake.remove(snake.size()-1);
         oldHead.setFill(Color.LIMEGREEN);
         newHead.setFill(Color.RED);
-        newHead.setCenterY((oldHead.getCenterY() - 20 + 400)%400);
+        newHead.setCenterY((oldHead.getCenterY() - 20)%400);
         newHead.setCenterX(oldHead.getCenterX());
         snake.add(0,newHead);
     }
+
 
     public void start(Stage stage) {
         AnchorPane anchorPane = new AnchorPane();
@@ -83,7 +90,7 @@ public class SnakePane {
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(30),event -> moveSnake(snake)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(50),event -> moveSnake(snake)));
         timeline.play();
 
         Scene scene = new Scene(anchorPane);
@@ -110,7 +117,6 @@ public class SnakePane {
         stage.show();
     }
 
-    private void moveSnake(List<Circle> snake) {
-    }
+
 
 }
